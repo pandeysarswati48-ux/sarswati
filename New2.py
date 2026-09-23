@@ -4,6 +4,7 @@ import google.generativeai as genai
 # ==========================
 # PAGE CONFIG
 # ==========================
+
 st.set_page_config(
     page_title="🔮 AstroGuide AI",
     page_icon="✨",
@@ -11,15 +12,22 @@ st.set_page_config(
 )
 
 # ==========================
+# GEMINI API KEY
+# ==========================
+
+API_KEY = "AQ.Ab8RN6K_nZE9Hyl5i5uWo2i0NsVaPggNSH8GBlZXv2_CDym68w"
+
+genai.configure(api_key=API_KEY)
+
+model = genai.GenerativeModel("gemini-3.6-flash")
+
+# ==========================
 # CUSTOM CSS
 # ==========================
+
 st.markdown("""
 <style>
-.main {
-    background: linear-gradient(135deg,#0f172a,#1e293b);
-}
-
-.stApp {
+.stApp{
     background: linear-gradient(135deg,#0f172a,#1e293b);
 }
 
@@ -34,11 +42,12 @@ st.markdown("""
     text-align:center;
     color:white;
     font-size:20px;
-    margin-bottom:30px;
+    margin-bottom:20px;
 }
 
 .prediction-box{
     background:#1e293b;
+    color:white;
     padding:20px;
     border-radius:15px;
     border:1px solid #FFD700;
@@ -53,48 +62,27 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ==========================
-# API KEY
-# ==========================
-
-API_KEY = "AQ.Ab8RN6K_nZE9Hyl5i5uWo2i0NsVaPggNSH8GBlZXv2_CDym68w"
-
-genai.configure(api_key=API_KEY)
-
-model = genai.GenerativeModel("gemini-flash-lite-latest")
-
-# ==========================
-# SYSTEM INSTRUCTION
+# SYSTEM PROMPT
 # ==========================
 
 SYSTEM_PROMPT = """
-You are AstroGuide AI, a friendly astrology assistant.
+You are AstroGuide AI.
 
 Provide:
-- Daily horoscope
-- Weekly forecast
-- Love prediction
-- Career prediction
-- Wellness guidance
-- Lucky color
-- Lucky number
-- Motivational advice
+- Daily Horoscope
+- Weekly Forecast
+- Love Prediction
+- Career Prediction
+- Wellness Guidance
+- Lucky Color
+- Lucky Number
+- Motivational Advice
 
 Rules:
-- Astrology is for entertainment and inspiration only.
-- Never claim certainty about future events.
-- Avoid medical, legal, financial, or harmful advice.
-- Be positive, engaging, and supportive.
+- Astrology is for entertainment purposes only.
+- Never guarantee future events.
+- Be positive and friendly.
 - Use headings and emojis.
-
-Format:
-
-🌟 Daily Horoscope
-❤️ Love
-💼 Career
-🌿 Wellness
-🎨 Lucky Color
-🔢 Lucky Number
-✨ Motivation
 """
 
 # ==========================
@@ -116,6 +104,7 @@ st.markdown(
 # ==========================
 
 with st.sidebar:
+
     st.header("🌙 Zodiac Information")
 
     zodiac = st.selectbox(
@@ -139,35 +128,35 @@ with st.sidebar:
     )
 
 # ==========================
-# USER QUERY
+# USER INPUT
 # ==========================
 
-user_question = st.text_area(
+question = st.text_area(
     "✨ Ask AstroGuide AI",
-    placeholder="Example: What does this week look like for my career?"
+    placeholder="What does this week look like for my career?"
 )
 
 # ==========================
-# GENERATE BUTTON
+# BUTTON
 # ==========================
 
-if st.button("🔮 Generate Prediction", use_container_width=True):
+if st.button("🔮 Generate Prediction"):
 
     prompt = f"""
     {SYSTEM_PROMPT}
 
     Zodiac Sign: {zodiac}
 
-    Request: {prediction_type}
+    Prediction Type: {prediction_type}
 
     User Question:
-    {user_question}
-
-    Generate a detailed astrology reading.
+    {question}
     """
 
     try:
-        with st.spinner("🔮 Reading the stars..."):
+
+        with st.spinner("Reading the stars... ✨"):
+
             response = model.generate_content(prompt)
 
         st.markdown("### ✨ Your Astrology Reading")
@@ -182,11 +171,12 @@ if st.button("🔮 Generate Prediction", use_container_width=True):
         )
 
         st.info(
-            "⚠️ Astrology readings are provided for entertainment and self-reflection purposes only."
+            "⚠️ Astrology readings are for entertainment and self-reflection only."
         )
 
     except Exception as e:
-        st.error(f"Error: {e}")
+
+        st.error(f"Error: {str(e)}")
 
 # ==========================
 # FOOTER
@@ -195,7 +185,7 @@ if st.button("🔮 Generate Prediction", use_container_width=True):
 st.markdown(
     """
     <div class='footer'>
-    ✨ AstroGuide AI | Entertainment Only | Powered by Gemini AI ✨
+    ✨ AstroGuide AI | Powered by Gemini ✨
     </div>
     """,
     unsafe_allow_html=True
