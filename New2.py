@@ -15,7 +15,7 @@ st.set_page_config(
 # GEMINI API KEY
 # ==========================
 
-API_KEY = "Enter your API  key"
+API_KEY = "AQ.Ab8RN6K_nZE9Hyl5i5uWo2i0NsVaPggNSH8GBlZXv2_CDym68w"
 
 genai.configure(api_key=API_KEY)
 
